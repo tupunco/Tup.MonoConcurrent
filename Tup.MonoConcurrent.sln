@@ -5,7 +5,7 @@ VisualStudioVersion = 12.0.30501.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tup.MonoConcurrent", "Tup.MonoConcurrent\Tup.MonoConcurrent.csproj", "{C4FDDCE7-28A9-4616-A62A-E617F44A676C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tup.Tup.MonoConcurrentTest", "Tup.Tup.MonoConcurrentTest\Tup.Tup.MonoConcurrentTest.csproj", "{F839DD39-346F-4D04-B51D-09F1EA596047}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tup.MonoConcurrentTest", "Tup.MonoConcurrentTest\Tup.MonoConcurrentTest.csproj", "{F839DD39-346F-4D04-B51D-09F1EA596047}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
