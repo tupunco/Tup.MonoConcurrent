@@ -6,12 +6,12 @@ using System.Runtime.InteropServices;
 // 特性集控制。更改这些特性值可修改
 // 与程序集关联的信息。
 [assembly: AssemblyTitle("Tup.MonoConcurrent")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Mono Concurrent classes, apply .NET 3.5")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("TUPUNCO")]
 [assembly: AssemblyProduct("Tup.MonoConcurrent")]
-[assembly: AssemblyCopyright("Copyright ©  2014")]
-[assembly: AssemblyTrademark("")]
+[assembly: AssemblyCopyright("Copyright © TUPUNCO 2014")]
+[assembly: AssemblyTrademark("TUPUNCO")]
 [assembly: AssemblyCulture("")]
 
 // 将 ComVisible 设置为 false 使此程序集中的类型

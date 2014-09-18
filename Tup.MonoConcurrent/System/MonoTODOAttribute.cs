@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
+﻿
 namespace System
 {
+    /// <summary>
+    /// MonoTODO Attribute
+    /// </summary>
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
     class MonoTODOAttribute : Attribute
     {
