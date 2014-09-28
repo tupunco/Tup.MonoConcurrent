@@ -116,6 +116,7 @@
   <ItemGroup>
     <None Include="System.Collections.Concurrent\ChangeLog" />
     <None Include="System.Threading.Tasks\ChangeLog" />
+    <None Include="System.Threading\ChangeLog" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Tup.MonoConcurrent\Tup.MonoConcurrent.csproj">

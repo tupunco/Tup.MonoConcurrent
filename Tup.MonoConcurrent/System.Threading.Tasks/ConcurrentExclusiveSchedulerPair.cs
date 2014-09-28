@@ -28,7 +28,8 @@
 //
 //
 
-#if NET_4_5
+//#if NET_4_5
+#if NET_4_0
 
 using System;
 using System.Threading;
