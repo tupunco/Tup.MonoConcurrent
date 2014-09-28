@@ -4,7 +4,7 @@ namespace System
     /// <summary>
     /// MonoTODO Attribute
     /// </summary>
-    [AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
+    [AttributeUsage(AttributeTargets.Method | AttributeTargets.Property, AllowMultiple = true)]
     class MonoTODOAttribute : Attribute
     {
         /// <summary>

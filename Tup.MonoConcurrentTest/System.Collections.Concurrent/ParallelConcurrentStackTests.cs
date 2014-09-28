@@ -23,12 +23,9 @@
 //
 //
 
-using System;
-using MonoTests.System.Threading.Tasks;
-using System.Collections.Concurrent;
-
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MonoTests.System.Threading.Tasks;
+using System.Collections.Concurrent;
 
 namespace MonoTests.System.Collections.Concurrent
 {

@@ -228,7 +228,8 @@ namespace MonoTests.System.Collections.Concurrent
         {
             int[] values = new int[3];
             Assert.AreEqual(3, stack.TryPopRange(values));
-            //TODO Assert.That(values, new CollectionEquivalentConstraint(new int[] { 9, 8, 7 }));
+            values.AreCollectionEquivalent(new int[] { 9, 8, 7 });
+            //--TODO Assert.That(values, new CollectionEquivalentConstraint(new int[] { 9, 8, 7 }));
             Assert.AreEqual(10 - values.Length, stack.Count);
             for (int i = 9 - values.Length; i >= 0; i--)
             {
@@ -250,7 +251,8 @@ namespace MonoTests.System.Collections.Concurrent
         {
             int[] values = new int[1];
             Assert.AreEqual(1, stack.TryPopRange(values));
-            //TODO Assert.That(values, new CollectionEquivalentConstraint(new int[] { 9 }));
+            values.AreCollectionEquivalent(new int[] { 9 });
+            //--TODO Assert.That(values, new CollectionEquivalentConstraint(new int[] { 9 }));
             Assert.AreEqual(10 - values.Length, stack.Count);
             for (int i = 9 - values.Length; i >= 0; i--)
             {
@@ -265,7 +267,8 @@ namespace MonoTests.System.Collections.Concurrent
         {
             int[] values = new int[10];
             Assert.AreEqual(10, stack.TryPopRange(values));
-            //TODO Assert.That(values, new CollectionEquivalentConstraint(Enumerable.Range(0, 10).Reverse()));
+            values.AreCollectionEquivalent(Enumerable.Range(0, 10).Reverse());
+            //--TODO Assert.That(values, new CollectionEquivalentConstraint(Enumerable.Range(0, 10).Reverse()));
             Assert.AreEqual(0, stack.Count);
         }
 
@@ -274,7 +277,8 @@ namespace MonoTests.System.Collections.Concurrent
         {
             int[] values = new int[5];
             Assert.AreEqual(2, stack.TryPopRange(values, 3, 2));
-            //TODO Assert.That(values, new CollectionEquivalentConstraint(new int[] { 0, 0, 0, 9, 8 }));
+            values.AreCollectionEquivalent(new int[] { 0, 0, 0, 9, 8 });
+            //--TODO Assert.That(values, new CollectionEquivalentConstraint(new int[] { 0, 0, 0, 9, 8 }));
             Assert.AreEqual(8, stack.Count);
         }
 

@@ -187,7 +187,7 @@ namespace System.Threading.Tasks
 						range.V64.Actual = ++i;
 					}
 
-					 bool sixtyfour = Environment2.Is64BitProcess;
+					 bool sixtyfour = EnvironmentEx.Is64BitProcess;
 					
 					// Try toExclusive steal fromInclusive our right neighbor (cyclic)
 					int len = num + localWorker;

@@ -53,8 +53,10 @@ namespace MonoTests.System.Threading.Tasks
 
                 Parallel.For(0, actual.Length, (i) => { actual[i] *= 2; sw.SpinOnce(); });
 
-                //todo Assert.That(actual, new CollectionEquivalentConstraint(expected), "#1, same");
-                //todo Assert.That(actual, new EqualConstraint(expected), "#2, in order");
+                actual.AreCollectionEquivalent(expected, "#1, same");
+                actual.AreEqual(expected, "#2, in order");
+                //--todo Assert.That(actual, new CollectionEquivalentConstraint(expected), "#1, same");
+                //--todo Assert.That(actual, new EqualConstraint(expected), "#2, in order");
             });
         }
 
@@ -117,7 +119,8 @@ namespace MonoTests.System.Threading.Tasks
 
                 Assert.AreEqual(500, count, "#1");
 
-                //todo Assert.That(queue, new CollectionEquivalentConstraint(e), "#2");
+                queue.AreCollectionEquivalent(e, "#2");
+                //--todo Assert.That(queue, new CollectionEquivalentConstraint(e), "#2");
             });
         }
 
@@ -151,7 +154,8 @@ namespace MonoTests.System.Threading.Tasks
             }
         }
 
-        [TestMethod][ExpectedException (typeof (AggregateException))]
+        [TestMethod]
+        [ExpectedException(typeof(AggregateException))]
         public void ParallelForEachExceptionTestCase()
         {
             IEnumerable<int> e = Enumerable.Repeat(1, 10);
@@ -196,14 +200,14 @@ namespace MonoTests.System.Threading.Tasks
         }
 
         [TestMethod]
-        [ExpectedException (typeof (ArgumentNullException))]
+        [ExpectedException(typeof(ArgumentNullException))]
         public void InvokeWithNullActions()
         {
             Parallel.Invoke((Action[])null);
         }
 
         [TestMethod]
-        [ExpectedException (typeof (ArgumentNullException))]
+        [ExpectedException(typeof(ArgumentNullException))]
         public void InvokeWithNullOptions()
         {
             Parallel.Invoke((ParallelOptions)null, () => Thread.Sleep(100));

@@ -44,7 +44,9 @@ namespace MonoTests.System.Collections.Concurrent
 			OrderablePartitioner<Tuple<int, int>> partitioner = Partitioner.Create (1, 20, 5);
 			var partitions = partitioner.GetOrderablePartitions (3);
 			Assert.AreEqual (3, partitions.Count);
-			//TODO Assert.That (partitions, Is.All.Not.Null);
+
+            partitions.AreIsAllNotNull();
+			//--TODO Assert.That (partitions, Is.All.Not.Null);
 			var iterator = partitions[0];			
 			Assert.IsTrue (iterator.MoveNext ());
 			Assert.IsTrue (iterator.Current.Equals (Create (0, 1, 6)));
@@ -65,7 +67,8 @@ namespace MonoTests.System.Collections.Concurrent
 			OrderablePartitioner<Tuple<long, long>> partitioner = Partitioner.Create ((long)1, (long)20, (long)5);
 			var partitions = partitioner.GetOrderablePartitions (3);
 			Assert.AreEqual (3, partitions.Count);
-			//TODO Assert.That (partitions, Is.All.Not.Null);
+            partitions.AreIsAllNotNull();
+			//--TODO Assert.That (partitions, Is.All.Not.Null);
 
 			var iterator = partitions[0];			
 			Assert.IsTrue (iterator.MoveNext ());

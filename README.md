@@ -12,11 +12,17 @@ Mono Concurrent classes, apply .NET 3.5
 
 [ConcurrentSkipList.cs](https://github.com/mono/mono/tree/master/mcs/class/Mono.Parallel/Mono.Collections.Concurrent)
 
-[CountdownEvent.cs/ManualResetEventSlim.cs/SpinLock.cs/SpinWait.cs//...](https://github.com/mono/mono/tree/master/mcs/class/corlib/System.Threading)
+[CountdownEvent.cs/ManualResetEventSlim.cs/SpinLock.cs/SpinWait.cs/LazyInitializer.cs/SemaphoreSlim.cs/...](https://github.com/mono/mono/tree/master/mcs/class/corlib/System.Threading)
+
+[Barrier.cs](https://github.com/mono/mono/tree/master/mcs/class/System/System.Threading/)
 
 [System.Collections.Concurrent](https://github.com/mono/mono/tree/master/mcs/class/corlib/System.Collections.Concurrent)
 
-[Tuple.cs/Tuples.cs/...](https://github.com/mono/mono/tree/master/mcs/class/corlib/System)
+[System.Linq.Parallel](https://github.com/mono/mono/tree/master/mcs/class/System.Core/System.Linq.Parallel)
+
+[ParallelQuery.cs/ParallelEnumerable.cs/...](https://github.com/mono/mono/tree/master/mcs/class/System.Core/System.Linq)
+
+[Tuple.cs/Tuples.cs/Lazy.cs/...](https://github.com/mono/mono/tree/master/mcs/class/corlib/System)
 
 
 [License](LICENSE)
