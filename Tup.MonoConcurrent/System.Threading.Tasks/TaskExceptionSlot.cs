@@ -35,33 +35,34 @@ using System.Collections.Concurrent;
 
 namespace System.Threading.Tasks
 {
-	internal class TaskExceptionSlot
-	{
-		public volatile AggregateException  Exception;
-		public volatile bool                Observed;
-		public ConcurrentQueue<AggregateException> ChildExceptions;
+    internal class TaskExceptionSlot
+    {
+        public volatile AggregateException Exception;
+        public volatile bool Observed;
+        public ConcurrentQueue<AggregateException> ChildExceptions;
 
-		Task parent;
+        Task parent;
 
-		public TaskExceptionSlot (Task parent)
-		{
-			this.parent = parent;
-		}
+        public TaskExceptionSlot(Task parent)
+        {
+            this.parent = parent;
+        }
 
-		~TaskExceptionSlot ()
-		{
-			if (Exception != null && !Observed && !TaskScheduler.FireUnobservedEvent (parent, Exception).Observed) {
-				// NET 4.5 changed the default exception behavior for unobserved exceptions. Unobserved exceptions still cause
-				// the UnobservedTaskException event to be raised but the process will not crash by default
-				//
-				// .NET allows to configure this using config element ThrowUnobservedTaskExceptions
-				//
+        ~TaskExceptionSlot()
+        {
+            if (Exception != null && !Observed && !TaskScheduler.FireUnobservedEvent(parent, Exception).Observed)
+            {
+                // NET 4.5 changed the default exception behavior for unobserved exceptions. Unobserved exceptions still cause
+                // the UnobservedTaskException event to be raised but the process will not crash by default
+                //
+                // .NET allows to configure this using config element ThrowUnobservedTaskExceptions
+                //
 #if !NET_4_5
-				throw Exception;
+                throw Exception;
 #endif
-			}
-		}
-	}
+            }
+        }
+    }
 }
 
 #endif

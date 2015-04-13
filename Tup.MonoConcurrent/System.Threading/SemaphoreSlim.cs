@@ -24,203 +24,215 @@
 
 using System;
 using System.Diagnostics;
-#if NET_4_5
+//#if NET_4_5
 using System.Threading.Tasks;
-#endif
+//#endif
 
 #if NET_4_0
 namespace System.Threading
 {
-	[System.Diagnostics.DebuggerDisplayAttribute ("Current Count = {currCount}")]
-	public class SemaphoreSlim : IDisposable
-	{
-		const int spinCount = 10;
-		const int deepSleepTime = 20;
+    [System.Diagnostics.DebuggerDisplayAttribute("Current Count = {currCount}")]
+    public class SemaphoreSlim : IDisposable
+    {
+        const int spinCount = 10;
+        const int deepSleepTime = 20;
 
-		readonly int maxCount;
-		int currCount;
-		bool isDisposed;
+        readonly int maxCount;
+        int currCount;
+        bool isDisposed;
 
-		EventWaitHandle handle;
+        EventWaitHandle handle;
 
-		public SemaphoreSlim (int initialCount) : this (initialCount, int.MaxValue)
-		{
-		}
+        public SemaphoreSlim(int initialCount)
+            : this(initialCount, int.MaxValue)
+        {
+        }
 
-		public SemaphoreSlim (int initialCount, int maxCount)
-		{
-			if (initialCount < 0 || initialCount > maxCount || maxCount < 0)
-				throw new ArgumentOutOfRangeException ("The initialCount  argument is negative, initialCount is greater than maxCount, or maxCount is not positive.");
+        public SemaphoreSlim(int initialCount, int maxCount)
+        {
+            if (initialCount < 0 || initialCount > maxCount || maxCount < 0)
+                throw new ArgumentOutOfRangeException("The initialCount  argument is negative, initialCount is greater than maxCount, or maxCount is not positive.");
 
-			this.maxCount = maxCount;
-			this.currCount = initialCount;
-			this.handle = new ManualResetEvent (initialCount > 0);
-		}
+            this.maxCount = maxCount;
+            this.currCount = initialCount;
+            this.handle = new ManualResetEvent(initialCount > 0);
+        }
 
-		public void Dispose ()
-		{
-			Dispose(true);
-		}
+        public void Dispose()
+        {
+            Dispose(true);
+        }
 
-		protected virtual void Dispose (bool disposing)
-		{
-			isDisposed = true;
-		}
+        protected virtual void Dispose(bool disposing)
+        {
+            isDisposed = true;
+        }
 
-		void CheckState ()
-		{
-			if (isDisposed)
-				throw new ObjectDisposedException ("The SemaphoreSlim has been disposed.");
-		}
+        void CheckState()
+        {
+            if (isDisposed)
+                throw new ObjectDisposedException("The SemaphoreSlim has been disposed.");
+        }
 
-		public int CurrentCount {
-			get {
-				return currCount;
-			}
-		}
+        public int CurrentCount
+        {
+            get
+            {
+                return currCount;
+            }
+        }
 
-		public int Release ()
-		{
-			return Release(1);
-		}
+        public int Release()
+        {
+            return Release(1);
+        }
 
-		public int Release (int releaseCount)
-		{
-			CheckState ();
-			if (releaseCount < 1)
-				throw new ArgumentOutOfRangeException ("releaseCount", "releaseCount is less than 1");
+        public int Release(int releaseCount)
+        {
+            CheckState();
+            if (releaseCount < 1)
+                throw new ArgumentOutOfRangeException("releaseCount", "releaseCount is less than 1");
 
-			// As we have to take care of the max limit we resort to CAS
-			int oldValue, newValue;
-			do {
-				oldValue = currCount;
-				newValue = (currCount + releaseCount);
-				newValue = newValue > maxCount ? maxCount : newValue;
-			} while (Interlocked.CompareExchange (ref currCount, newValue, oldValue) != oldValue);
+            // As we have to take care of the max limit we resort to CAS
+            int oldValue, newValue;
+            do
+            {
+                oldValue = currCount;
+                newValue = (currCount + releaseCount);
+                newValue = newValue > maxCount ? maxCount : newValue;
+            } while (Interlocked.CompareExchange(ref currCount, newValue, oldValue) != oldValue);
 
-			handle.Set ();
+            handle.Set();
 
-			return oldValue;
-		}
+            return oldValue;
+        }
 
-		public void Wait ()
-		{
-			Wait (CancellationToken.None);
-		}
+        public void Wait()
+        {
+            Wait(CancellationToken.None);
+        }
 
-		public bool Wait (TimeSpan timeout)
-		{
-			return Wait ((int)timeout.TotalMilliseconds, CancellationToken.None);
-		}
+        public bool Wait(TimeSpan timeout)
+        {
+            return Wait((int)timeout.TotalMilliseconds, CancellationToken.None);
+        }
 
-		public bool Wait (int millisecondsTimeout)
-		{
-			return Wait (millisecondsTimeout, CancellationToken.None);
-		}
+        public bool Wait(int millisecondsTimeout)
+        {
+            return Wait(millisecondsTimeout, CancellationToken.None);
+        }
 
-		public void Wait (CancellationToken cancellationToken)
-		{
-			Wait (-1, cancellationToken);
-		}
+        public void Wait(CancellationToken cancellationToken)
+        {
+            Wait(-1, cancellationToken);
+        }
 
-		public bool Wait (TimeSpan timeout, CancellationToken cancellationToken)
-		{
-			CheckState();
-			return Wait ((int)timeout.TotalMilliseconds, cancellationToken);
-		}
+        public bool Wait(TimeSpan timeout, CancellationToken cancellationToken)
+        {
+            CheckState();
+            return Wait((int)timeout.TotalMilliseconds, cancellationToken);
+        }
 
-		public bool Wait (int millisecondsTimeout, CancellationToken cancellationToken)
-		{
-			CheckState ();
-			if (millisecondsTimeout < -1)
-				throw new ArgumentOutOfRangeException ("millisecondsTimeout",
-				                                       "millisecondsTimeout is a negative number other than -1");
+        public bool Wait(int millisecondsTimeout, CancellationToken cancellationToken)
+        {
+            CheckState();
+            if (millisecondsTimeout < -1)
+                throw new ArgumentOutOfRangeException("millisecondsTimeout",
+                                                       "millisecondsTimeout is a negative number other than -1");
 
-			Watch sw = Watch.StartNew ();
+            Watch sw = Watch.StartNew();
 
-			Func<bool> stopCondition = () => millisecondsTimeout >= 0 && sw.ElapsedMilliseconds > millisecondsTimeout;
+            Func<bool> stopCondition = () => millisecondsTimeout >= 0 && sw.ElapsedMilliseconds > millisecondsTimeout;
 
-			do {
-				bool shouldWait;
-				int result;
+            do
+            {
+                bool shouldWait;
+                int result;
 
-				do {
-					cancellationToken.ThrowIfCancellationRequested ();
-					if (stopCondition ())
-						return false;
+                do
+                {
+                    cancellationToken.ThrowIfCancellationRequested();
+                    if (stopCondition())
+                        return false;
 
-					shouldWait = true;
-					result = currCount;
+                    shouldWait = true;
+                    result = currCount;
 
-					if (result > 0)
-						shouldWait = false;
-					else
-						break;
-				} while (Interlocked.CompareExchange (ref currCount, result - 1, result) != result);
+                    if (result > 0)
+                        shouldWait = false;
+                    else
+                        break;
+                } while (Interlocked.CompareExchange(ref currCount, result - 1, result) != result);
 
-				if (!shouldWait) {
-					if (result == 1)
-						handle.Reset ();
-					break;
-				}
+                if (!shouldWait)
+                {
+                    if (result == 1)
+                        handle.Reset();
+                    break;
+                }
 
-				SpinWait wait = new SpinWait ();
+                SpinWait wait = new SpinWait();
 
-				while (Thread.VolatileRead (ref currCount) <= 0) {
-					cancellationToken.ThrowIfCancellationRequested ();
-					if (stopCondition ())
-						return false;
+                while (Thread.VolatileRead(ref currCount) <= 0)
+                {
+                    cancellationToken.ThrowIfCancellationRequested();
+                    if (stopCondition())
+                        return false;
 
-					if (wait.Count > spinCount) {
-						int timeout = millisecondsTimeout < 0 ? deepSleepTime :
-							Math.Min (Math.Max (millisecondsTimeout - (int)sw.ElapsedMilliseconds, 1), deepSleepTime);
-						handle.WaitOne (timeout);
-					} else
-						wait.SpinOnce ();
-				}
-			} while (true);
+                    if (wait.Count > spinCount)
+                    {
+                        int timeout = millisecondsTimeout < 0 ? deepSleepTime :
+                            Math.Min(Math.Max(millisecondsTimeout - (int)sw.ElapsedMilliseconds, 1), deepSleepTime);
+                        handle.WaitOne(timeout);
+                    }
+                    else
+                        wait.SpinOnce();
+                }
+            } while (true);
 
-			return true;
-		}
+            return true;
+        }
 
-		public WaitHandle AvailableWaitHandle {
-			get {
-				return handle;
-			}
-		}
+        public WaitHandle AvailableWaitHandle
+        {
+            get
+            {
+                return handle;
+            }
+        }
 
-#if NET_4_5
-		public Task WaitAsync ()
-		{
-			return Task.Factory.StartNew (() => Wait ());
-		}
+        //#if NET_4_5
+        public Task WaitAsync()
+        {
+            return Task.Factory.StartNew(() => Wait());
+        }
 
-		public Task WaitAsync (CancellationToken cancellationToken)
-		{
-			return Task.Factory.StartNew (() => Wait (cancellationToken), cancellationToken);
-		}
+        public Task WaitAsync(CancellationToken cancellationToken)
+        {
+            return Task.Factory.StartNew(() => Wait(cancellationToken), cancellationToken);
+        }
 
-		public Task<bool> WaitAsync (int millisecondsTimeout)
-		{
-			return Task.Factory.StartNew (() => Wait (millisecondsTimeout));
-		}
+        public Task<bool> WaitAsync(int millisecondsTimeout)
+        {
+            return Task.Factory.StartNew(() => Wait(millisecondsTimeout));
+        }
 
-		public Task<bool> WaitAsync (TimeSpan timeout)
-		{
-			return Task.Factory.StartNew (() => Wait (timeout));
-		}
+        public Task<bool> WaitAsync(TimeSpan timeout)
+        {
+            return Task.Factory.StartNew(() => Wait(timeout));
+        }
 
-		public Task<bool> WaitAsync (int millisecondsTimeout, CancellationToken cancellationToken)
-		{
-			return Task.Factory.StartNew (() => Wait (millisecondsTimeout, cancellationToken), cancellationToken);
-		}
+        public Task<bool> WaitAsync(int millisecondsTimeout, CancellationToken cancellationToken)
+        {
+            return Task.Factory.StartNew(() => Wait(millisecondsTimeout, cancellationToken), cancellationToken);
+        }
 
-		public Task<bool> WaitAsync (TimeSpan timeout, CancellationToken cancellationToken)
-		{
-			return Task.Factory.StartNew (() => Wait (timeout, cancellationToken), cancellationToken);
-		}
-#endif
+        public Task<bool> WaitAsync(TimeSpan timeout, CancellationToken cancellationToken)
+        {
+            return Task.Factory.StartNew(() => Wait(timeout, cancellationToken), cancellationToken);
+        }
+        //#endif
 
-	}
+    }
 }
 #endif

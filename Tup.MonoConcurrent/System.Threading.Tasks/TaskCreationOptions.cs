@@ -38,10 +38,10 @@ namespace System.Threading.Tasks
 		PreferFairness   = 0x1,
 		LongRunning      = 0x2,
 		AttachedToParent = 0x4,
-#if NET_4_5
+//#if NET_4_5
 		DenyChildAttach  = 0x8,
 		HideScheduler    = 0x10
-#endif
+//#endif
 	}
 }
 #endif

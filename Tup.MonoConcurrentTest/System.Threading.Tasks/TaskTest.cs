@@ -399,16 +399,16 @@ namespace MonoTests.System.Threading.Tasks
             Assert.IsTrue(tasks[1].IsCanceled, "#4");
         }
 
-#if NET_4_5		
-		        [TestMethod]
-		public void WaitAll_CancelledAndTimeout ()
-		{
-			var ct = new CancellationToken (true);
-			var t1 = new Task (() => {}, ct);
-			var t2 = Task.Delay (3000);
-			Assert.IsFalse (Task.WaitAll (new[] { t1, t2 }, 10));
-		}
-#endif
+        //#if NET_4_5		
+        [TestMethod]
+        public void WaitAll_CancelledAndTimeout()
+        {
+            var ct = new CancellationToken(true);
+            var t1 = new Task(() => { }, ct);
+            var t2 = Task.Delay(3000);
+            Assert.IsFalse(Task.WaitAll(new[] { t1, t2 }, 10));
+        }
+        //#endif
 
         [TestMethod]
         public void WaitAllExceptionThenCancelled()
